@@ -1,32 +1,54 @@
 const express = require("express");
+require("./db");
+const serVer = require("./models/serVer");
 const app = express();
 const PORT = 3000;
 
-// Middleware para entedender JSON  no corpo das requisições
+//
 app.use(express.json());
 
-// array (Como banco de dados )
-let tarefas = [];
-let idAtual = 1;
-
-app.get("/", (requisisao, resposta) => {
-  resposta.status(200).send("Bem-vindo á API");
+app.get("/", (req, res) => {
+  res.status(200).send("Bem Vindo a API");
 });
 
-app.get("/tarefas", (req, res) => {
-  res.json(tarefas);
-});
-
-app.post("/tarefas", (req, res) => {
-  const { titulo } = req.body;
-  if (!titulo) {
-    return res.status(400).json({ erro: "Titulo obgt" });
+app.post("/tarefas", async (req, res) => {
+  const { descricao } = req.body;
+  if (!descricao) {
+    return res.status(400).json({ erro: "Preencha a Descrição" });
   }
-  const novaTarefa = { id: idAtual++, titulo };
-  tarefas.push(novaTarefa);
-  res.status(201).json(novaTarefa);
+  try {
+    const novaTarefa = new serVer({ descricao });
+    await novaTarefa.save();
+    res.status(201).json(novaTarefa);
+  } catch (error) {}
+  res.status(500).json({ erro: "Erro ao incluir tarefa" });
+});
+
+app.delete("/tarefas/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tarefas = await serVer.findByIdAndDelete(id);
+    if (!tarefas) {
+      return res.status(400).json({ erro: "Tarefa não Encontrada" });
+    }
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ erro: "Erro ao Remover Tarefa" });
+  }
+});
+
+app.get("/tarefas/id", async (req, res) => {
+  try {
+    const tarefas = await serVer.findById(id);
+    if (!tarefas) {
+      return res.status(400).json({ erro: "Tarefa não Encontrada" });
+    }
+    res.status(219).json(tarefas);
+  } catch (error) {
+    res.status(500).json({ erro: "Erro ao Remover Tarefa" });
+  }
 });
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`Servidor Rodando na portas ${PORT}`);
 });

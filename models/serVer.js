@@ -1,3 +1,4 @@
+const { Router } = require("express");
 const mongoose = require("mongoose");
 
 const serVerSchema = new mongoose.Schema({
@@ -5,3 +6,6 @@ const serVerSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("serVer", serVerSchema);
+
+
+// blabla

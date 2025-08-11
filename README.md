@@ -18,4 +18,4 @@ Esse projeto faz parte dos meus estudos com:
 - Integração com MongoDB
 - Testes de endpoints com Postman
 
-<p align="center">Feito com ❤️ para fins de aprendizado</p> 
+<p align="center">Feito para fins de aprendizado</p> 
